@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>WordPress-pg Install (Russian only)</title>
+	<link rel="stylesheet" href="wp-admin/css/install.css?ver=20100228" type="text/css" />
+</head>
+<body>
+<h1 id="logo">
+	<a href="http://wordpress.org/"><img alt="WordPress" src="wp-admin/images/wordpress-logo.png" /></a>
+	<br /> Version 3.6 (адаптированная для работы с PostgreSQL)
+</h1>
+<p style="text-align: center">Semantic Personal Publishing Platform</p>
+
+<h1>Как установить</h1>
+<p>Эта версия устанавливается вручную!</p>
+<p>Вам потребуется <strong>PostgreSQL</strong> версии не ниже 9 (<strong>с включенной поддержкой языка Perl</strong>) и этот дистрибутив. Пока что установка не является тривиальной и подразумевает, что у вас есть навыки установки PostgreSQL и Wordpress под MySQL.</p>
+<p>В общем установка не отличается от установки Wordpress совместно с СУБД MySQL, но из этой установки убран GUI-инсталлятор и вам придется создать базу и подправить конфигурационный файл вручную.</p>
+<p>Придерживайтесь этой инструкции и всё дожно получиться.</p>
+<ol>
+    <li>Измените переменную <strong>[% HOST_NAME %]</strong> в дампе базы данных <strong>/wordpress36.pg.sql</strong></li>
+    <li>Создайте пользователя (роль) СУБД "<strong>wordpress</strong>" с административными правами .</li>
+    <li>Создайте базу данных "<strong>wp36</strong>" и импортируйте в неё исправленный дамп из файла <strong>/wordpress36.pg.sql</strong>.</li>
+</ol>
+<p><a href="/wp-admin">Вход в админку тут</a></p>
+<p>Суперпользователь Wordpress - <strong>admin</strong>, пароль "<strong>admin</strong>".</p>
+<p>Обязательно смените хотя бы пароль после установки.</p>
+
+
+<h1>License</h1>
+<p>WordPress-pg is free software, and is released under the terms of the <abbr title="GNU General Public License">GPL</abbr> version 2 or (at your option) any later version. See <a href="license.txt">license.txt</a>.</p>
+
+</body>
+</html>
