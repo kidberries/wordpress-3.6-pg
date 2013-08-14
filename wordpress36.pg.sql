@@ -36,17 +36,17 @@ CREATE SCHEMA mysql;
 ALTER SCHEMA mysql OWNER TO wordpress;
 
 --
--- Name: plperl; Type: EXTENSION; Schema: -; Owner: 
+-- Name: plperlu; Type: EXTENSION; Schema: -; Owner: 
 --
 
-CREATE EXTENSION IF NOT EXISTS plperl WITH SCHEMA pg_catalog;
+CREATE EXTENSION IF NOT EXISTS plperlu WITH SCHEMA pg_catalog;
 
 
 --
--- Name: EXTENSION plperl; Type: COMMENT; Schema: -; Owner: 
+-- Name: EXTENSION plperlu; Type: COMMENT; Schema: -; Owner: 
 --
 
-COMMENT ON EXTENSION plperl IS 'PL/PerlU untrusted procedural language';
+COMMENT ON EXTENSION plperlu IS 'PL/PerlU untrusted procedural language';
 
 
 --
@@ -118,7 +118,7 @@ ALTER FUNCTION casts._interval_to_bigint(interval) OWNER TO wordpress;
 --
 
 CREATE FUNCTION _text_to_bigint(text) RETURNS bigint
-    LANGUAGE plperl IMMUTABLE STRICT COST 1
+    LANGUAGE plperlu IMMUTABLE STRICT COST 1
     AS $_X$
   return $1 if ($_[0] =~ m/^(\d+)(\.\d+)?$/);
   return undef;
@@ -132,7 +132,7 @@ ALTER FUNCTION casts._text_to_bigint(text) OWNER TO wordpress;
 --
 
 CREATE FUNCTION _text_to_date(text) RETURNS date
-    LANGUAGE plperl IMMUTABLE STRICT COST 1
+    LANGUAGE plperlu IMMUTABLE STRICT COST 1
     AS $_X$
   $_[0] =~ s/0000-00-00/0001-01-01/; #its just for mysql date format
   return $& if( $_[0] =~ m/^(\d{4}-\d{1,2}-\d{1,2})/ );
@@ -147,7 +147,7 @@ ALTER FUNCTION casts._text_to_date(text) OWNER TO wordpress;
 --
 
 CREATE FUNCTION _text_to_numeric(text) RETURNS numeric
-    LANGUAGE plperl IMMUTABLE STRICT COST 1
+    LANGUAGE plperlu IMMUTABLE STRICT COST 1
     AS $_X$
   return $1.$2 if( $_[0] =~ m/^(\d+)(\.\d+)?$/);
   return undef;
@@ -161,7 +161,7 @@ ALTER FUNCTION casts._text_to_numeric(text) OWNER TO wordpress;
 --
 
 CREATE FUNCTION _text_to_time(text) RETURNS time without time zone
-    LANGUAGE plperl IMMUTABLE STRICT COST 1
+    LANGUAGE plperlu IMMUTABLE STRICT COST 1
     AS $_X$
   
   return $& if( $_[0] =~ s/^(\d{1,2}:\d{1,2})(:\d{1,2}(\.\d+)?)?$/$1$2/ );
@@ -176,7 +176,7 @@ ALTER FUNCTION casts._text_to_time(text) OWNER TO wordpress;
 --
 
 CREATE FUNCTION _text_to_timestamp(text) RETURNS timestamp without time zone
-    LANGUAGE plperl IMMUTABLE STRICT COST 1
+    LANGUAGE plperlu IMMUTABLE STRICT COST 1
     AS $_X$
   $_[0] =~ s/0000-00-00/0001-01-01/; #its just for mysql date format
   return $_[0] if( $_[0] =~ s/^(\d{4}-\d{2}-\d{2})( \d{1,2}:\d{2}:\d{2})?(\.\d+)?([\+\-\d\:.]+)?/$1$2$3$4/ );
@@ -191,7 +191,7 @@ ALTER FUNCTION casts._text_to_timestamp(text) OWNER TO wordpress;
 --
 
 CREATE FUNCTION _text_to_timestamptz(text) RETURNS timestamp with time zone
-    LANGUAGE plperl IMMUTABLE STRICT COST 1
+    LANGUAGE plperlu IMMUTABLE STRICT COST 1
     AS $_X$
   $_[0] =~ s/0000-00-00/0001-01-01/; #its just for mysql date format
   return $_[0] if( $_[0] =~ s/^(\d{4}-\d{2}-\d{2})( \d{1,2}:\d{2}:\d{2})?(\.\d+)?([\+\-\d\:.]+)?/$1$2$3$4/ );
@@ -238,7 +238,7 @@ ALTER FUNCTION casts._time_to_integer(time with time zone) OWNER TO wordpress;
 --
 
 CREATE FUNCTION _unknown_to_bigint(unknown) RETURNS bigint
-    LANGUAGE plperl
+    LANGUAGE plperlu
     AS $_X$
   return $1 if ($_[0] =~ m/^(\d+)(\.\d+)?$/);
   return undef;
@@ -274,6 +274,19 @@ END;$$;
 
 
 ALTER FUNCTION fn.post_tsv() OWNER TO wordpress;
+
+--
+-- Name: wp_plainto_tsquery(regconfig, text); Type: FUNCTION; Schema: fn; Owner: wordpress
+--
+
+CREATE FUNCTION wp_plainto_tsquery(regconfig, text) RETURNS tsquery
+    LANGUAGE sql IMMUTABLE STRICT
+    AS $_$
+SELECT plainto_tsquery($1,$2);
+$_$;
+
+
+ALTER FUNCTION fn.wp_plainto_tsquery(regconfig, text) OWNER TO wordpress;
 
 SET search_path = mysql, pg_catalog;
 
@@ -3311,13 +3324,14 @@ INSERT INTO wp_options (option_id, option_name, option_value, autoload) VALUES (
 INSERT INTO wp_options (option_id, option_name, option_value, autoload) VALUES (176, '_transient_timeout_dash_de3249c4736ad3bd2cd29147c4a0d43e', '1376523377', 'no');
 INSERT INTO wp_options (option_id, option_name, option_value, autoload) VALUES (174, '_transient_timeout_plugin_slugs', '1376566579', 'no');
 INSERT INTO wp_options (option_id, option_name, option_value, autoload) VALUES (178, 'recently_activated', 'a:0:{}', 'yes');
+INSERT INTO wp_options (option_id, option_name, option_value, autoload) VALUES (179, 'category_children', 'a:0:{}', 'yes');
 
 
 --
 -- Name: wp_options_option_id_seq; Type: SEQUENCE SET; Schema: public; Owner: wordpress
 --
 
-SELECT pg_catalog.setval('wp_options_option_id_seq', 178, true);
+SELECT pg_catalog.setval('wp_options_option_id_seq', 179, true);
 
 
 --
