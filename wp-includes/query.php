@@ -2204,7 +2204,7 @@ class WP_Query {
 				preg_match_all('/".*?("|$)|((?<=[\r\n\t ",+])|^)[^\r\n\t ",+]+/', $q['s'], $matches);
 				$q['search_terms'] = array_map('_search_terms_tidy', $matches[0]);
 			}
-			$tsq     = "plainto_tsquery('russian', '" . implode( ' ', $q['search_terms'] ) . "')";
+			$tsq     = "wp_plainto_tsquery('russian', '" . implode( ' ', $q['search_terms'] ) . "')";
 			$search .= "$wpdb->posts.tsv @@ $tsq";
 
 			if ( !empty($search) ) {
@@ -2383,7 +2383,7 @@ class WP_Query {
 					preg_match_all('/".*?("|$)|((?<=[\r\n\t ",+])|^)[^\r\n\t ",+]+/', $q['s'], $matches);
 					$q['search_terms'] = array_map('_search_terms_tidy', $matches[0]);
 				}
-				$tsv_orderby = "(1 - ts_rank( $wpdb->posts.tsv, plainto_tsquery('russian', '" . implode( ' ', $q['search_terms'] ) . "')))";
+				$tsv_orderby = "(1 - ts_rank( $wpdb->posts.tsv, wp_plainto_tsquery('russian', '" . implode( ' ', $q['search_terms'] ) . "')))";
 			}
 
 			$orderby_array = array();
