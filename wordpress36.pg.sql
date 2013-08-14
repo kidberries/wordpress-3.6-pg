@@ -36,17 +36,17 @@ CREATE SCHEMA mysql;
 ALTER SCHEMA mysql OWNER TO wordpress;
 
 --
--- Name: plperlu; Type: EXTENSION; Schema: -; Owner: 
+-- Name: plperl; Type: EXTENSION; Schema: -; Owner: 
 --
 
-CREATE EXTENSION IF NOT EXISTS plperlu WITH SCHEMA pg_catalog;
+CREATE EXTENSION IF NOT EXISTS plperl WITH SCHEMA pg_catalog;
 
 
 --
--- Name: EXTENSION plperlu; Type: COMMENT; Schema: -; Owner: 
+-- Name: EXTENSION plperl; Type: COMMENT; Schema: -; Owner: 
 --
 
-COMMENT ON EXTENSION plperlu IS 'PL/PerlU untrusted procedural language';
+COMMENT ON EXTENSION plperl IS 'PL/PerlU untrusted procedural language';
 
 
 --
@@ -118,7 +118,7 @@ ALTER FUNCTION casts._interval_to_bigint(interval) OWNER TO wordpress;
 --
 
 CREATE FUNCTION _text_to_bigint(text) RETURNS bigint
-    LANGUAGE plperlu IMMUTABLE STRICT COST 1
+    LANGUAGE plperl IMMUTABLE STRICT COST 1
     AS $_X$
   return $1 if ($_[0] =~ m/^(\d+)(\.\d+)?$/);
   return undef;
@@ -132,7 +132,7 @@ ALTER FUNCTION casts._text_to_bigint(text) OWNER TO wordpress;
 --
 
 CREATE FUNCTION _text_to_date(text) RETURNS date
-    LANGUAGE plperlu IMMUTABLE STRICT COST 1
+    LANGUAGE plperl IMMUTABLE STRICT COST 1
     AS $_X$
   $_[0] =~ s/0000-00-00/0001-01-01/; #its just for mysql date format
   return $& if( $_[0] =~ m/^(\d{4}-\d{1,2}-\d{1,2})/ );
@@ -147,7 +147,7 @@ ALTER FUNCTION casts._text_to_date(text) OWNER TO wordpress;
 --
 
 CREATE FUNCTION _text_to_numeric(text) RETURNS numeric
-    LANGUAGE plperlu IMMUTABLE STRICT COST 1
+    LANGUAGE plperl IMMUTABLE STRICT COST 1
     AS $_X$
   return $1.$2 if( $_[0] =~ m/^(\d+)(\.\d+)?$/);
   return undef;
@@ -161,7 +161,7 @@ ALTER FUNCTION casts._text_to_numeric(text) OWNER TO wordpress;
 --
 
 CREATE FUNCTION _text_to_time(text) RETURNS time without time zone
-    LANGUAGE plperlu IMMUTABLE STRICT COST 1
+    LANGUAGE plperl IMMUTABLE STRICT COST 1
     AS $_X$
   
   return $& if( $_[0] =~ s/^(\d{1,2}:\d{1,2})(:\d{1,2}(\.\d+)?)?$/$1$2/ );
@@ -176,7 +176,7 @@ ALTER FUNCTION casts._text_to_time(text) OWNER TO wordpress;
 --
 
 CREATE FUNCTION _text_to_timestamp(text) RETURNS timestamp without time zone
-    LANGUAGE plperlu IMMUTABLE STRICT COST 1
+    LANGUAGE plperl IMMUTABLE STRICT COST 1
     AS $_X$
   $_[0] =~ s/0000-00-00/0001-01-01/; #its just for mysql date format
   return $_[0] if( $_[0] =~ s/^(\d{4}-\d{2}-\d{2})( \d{1,2}:\d{2}:\d{2})?(\.\d+)?([\+\-\d\:.]+)?/$1$2$3$4/ );
@@ -191,7 +191,7 @@ ALTER FUNCTION casts._text_to_timestamp(text) OWNER TO wordpress;
 --
 
 CREATE FUNCTION _text_to_timestamptz(text) RETURNS timestamp with time zone
-    LANGUAGE plperlu IMMUTABLE STRICT COST 1
+    LANGUAGE plperl IMMUTABLE STRICT COST 1
     AS $_X$
   $_[0] =~ s/0000-00-00/0001-01-01/; #its just for mysql date format
   return $_[0] if( $_[0] =~ s/^(\d{4}-\d{2}-\d{2})( \d{1,2}:\d{2}:\d{2})?(\.\d+)?([\+\-\d\:.]+)?/$1$2$3$4/ );
@@ -238,7 +238,7 @@ ALTER FUNCTION casts._time_to_integer(time with time zone) OWNER TO wordpress;
 --
 
 CREATE FUNCTION _unknown_to_bigint(unknown) RETURNS bigint
-    LANGUAGE plperlu
+    LANGUAGE plperl
     AS $_X$
   return $1 if ($_[0] =~ m/^(\d+)(\.\d+)?$/);
   return undef;
